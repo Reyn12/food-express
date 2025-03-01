@@ -6,11 +6,13 @@ export default function TabLayout() {
     <Tabs screenOptions={{
       tabBarActiveTintColor: '#e91e63',
       tabBarInactiveTintColor: 'gray',
+      headerShown: false,
     }}>
       <Tabs.Screen 
         name="home" 
         options={{
           title: 'Home',
+          tabBarLabel: 'Home',
           tabBarIcon: ({ focused, color }) => (
             <Ionicons name={focused ? 'home' : 'home-outline'} size={24} color={color} />
           ),
@@ -20,6 +22,7 @@ export default function TabLayout() {
         name="menu" 
         options={{
           title: 'Menu',
+          tabBarLabel: 'Menu',
           tabBarIcon: ({ focused, color }) => (
             <Ionicons name={focused ? 'restaurant' : 'restaurant-outline'} size={24} color={color} />
           ),
@@ -29,6 +32,7 @@ export default function TabLayout() {
         name="pesanan" 
         options={{
           title: 'Pesanan',
+          tabBarLabel: 'Pesanan',
           tabBarIcon: ({ focused, color }) => (
             <Ionicons name={focused ? 'receipt' : 'receipt-outline'} size={24} color={color} />
           ),
@@ -38,6 +42,7 @@ export default function TabLayout() {
         name="profile" 
         options={{
           title: 'Profile',
+          tabBarLabel: 'Profile',
           tabBarIcon: ({ focused, color }) => (
             <Ionicons name={focused ? 'person' : 'person-outline'} size={24} color={color} />
           ),
