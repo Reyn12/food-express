@@ -1,17 +1,68 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SIZES } from '../../constants/theme';
+import { useState, useEffect } from 'react';
+import * as Location from 'expo-location';
+import mapboxSdk from '@mapbox/mapbox-sdk';
+import geocoding from '@mapbox/mapbox-sdk/services/geocoding';
+import Constants from 'expo-constants';
 
 const LocationHeader = () => {
+  const [address, setAddress] = useState('Loading...');
+  
+  useEffect(() => {
+    getUserLocation();
+  }, []);
+
+  const getUserLocation = async () => {
+    try {
+      // Minta izin lokasi
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      
+      if (status !== 'granted') {
+        setAddress('Izin lokasi ditolak');
+        return;
+      }
+
+      // Dapatkan lokasi user
+      const location = await Location.getCurrentPositionAsync({});
+      const { latitude, longitude } = location.coords;
+      
+      // Gunakan Mapbox untuk reverse geocoding
+      const mapboxClient = mapboxSdk({ accessToken: Constants.expoConfig?.extra?.mapboxAccessToken });
+      const geocodingClient = geocoding(mapboxClient);
+      
+      const response = await geocodingClient.reverseGeocode({
+        query: [longitude, latitude],
+        limit: 1
+      }).send();
+      
+      if (response && response.body.features.length > 0) {
+        const place = response.body.features[0];
+        // Menggunakan place.text yang berisi nama lokasi utama saja
+        setAddress(place.text);
+      }
+    } catch (error) {
+      console.error('Error getting location:', error);
+      setAddress('Gagal mendapatkan lokasi');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.locationContainer}>
         <Text style={styles.label}>Delivery Address</Text>
-        <View style={styles.addressRow}>
+        <TouchableOpacity style={styles.addressRow} onPress={getUserLocation}>
           <Ionicons name="location-outline" size={20} color={COLORS.primary} />
-          <Text style={styles.address}>Dhaka, Bangladesh</Text>
+          <Text 
+            style={styles.address} 
+            numberOfLines={1} 
+            ellipsizeMode="middle"
+          >
+            {address}
+          </Text>
           <Ionicons name="chevron-down" size={20} color={COLORS.text.secondary} />
-        </View>
+        </TouchableOpacity>
       </View>
 
       <TouchableOpacity style={styles.cartButton}>
@@ -44,13 +95,12 @@ const styles = StyleSheet.create({
   addressRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 4,
   },
   address: {
     fontSize: 16,
     fontWeight: '600',
     color: COLORS.primary,
-    marginRight: 4,
   },
   cartButton: {
     position: 'relative',
