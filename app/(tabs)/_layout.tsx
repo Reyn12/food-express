@@ -1,43 +1,46 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
-
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
-      <Tabs.Screen
-        name="index"
+    <Tabs screenOptions={{
+      tabBarActiveTintColor: '#e91e63',
+      tabBarInactiveTintColor: 'gray',
+    }}>
+      <Tabs.Screen 
+        name="home" 
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons name={focused ? 'home' : 'home-outline'} size={24} color={color} />
+          ),
         }}
       />
-      <Tabs.Screen
-        name="explore"
+      <Tabs.Screen 
+        name="menu" 
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Menu',
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons name={focused ? 'restaurant' : 'restaurant-outline'} size={24} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen 
+        name="pesanan" 
+        options={{
+          title: 'Pesanan',
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons name={focused ? 'receipt' : 'receipt-outline'} size={24} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen 
+        name="profile" 
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons name={focused ? 'person' : 'person-outline'} size={24} color={color} />
+          ),
         }}
       />
     </Tabs>
