@@ -7,6 +7,18 @@ export default function TabLayout() {
       tabBarActiveTintColor: '#e91e63',
       tabBarInactiveTintColor: 'gray',
       headerShown: false,
+      tabBarStyle: {
+        marginHorizontal: 20,
+        borderRadius: 15,
+        paddingTop: 10,
+        // Kalo mau kasih shadow
+        elevation: 5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+      },
+      
     }}>
       <Tabs.Screen 
         name="home" 
