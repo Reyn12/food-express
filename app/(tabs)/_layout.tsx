@@ -8,10 +8,8 @@ export default function TabLayout() {
       tabBarInactiveTintColor: 'gray',
       headerShown: false,
       tabBarStyle: {
-        marginHorizontal: 20,
-        borderRadius: 15,
+        borderRadius: 35,
         paddingTop: 10,
-        // Kalo mau kasih shadow
         elevation: 5,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
