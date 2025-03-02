@@ -21,8 +21,8 @@ interface CarouselItem {
 const carouselData: CarouselItem[] = [
     {
         id: '1',
-        title: 'Shop Smarter,\nSave More!',
-        buttonText: 'Get 40% Off ',
+        title: 'Belanja Hemat,\nUntung Banyak!',
+        buttonText: 'Diskon 40% 🔥',
         image: require('../../public/images/orang-banner1.png'),
         color: COLORS.accent,
         imageWidth: 220,
@@ -30,18 +30,18 @@ const carouselData: CarouselItem[] = [
     },
     {
         id: '2',
-        title: 'Quick Order\nFavorites',
-        buttonText: 'Order Now ',
-        image: require('../../public/images/orang-banner2.png'), // Gunakan gambar yang sama untuk sementara
+        title: 'Pesan Cepat\nFavorit Kamu 🍔',
+        buttonText: 'Pesan Sekarang ⚡',
+        image: require('../../public/images/orang-banner2.png'),
         color: '#4CAF50', // Warna hijau
         imageWidth: 280,
         imageHeight: 200,
     },
     {
         id: '3',
-        title: 'Join\nMembership',
-        buttonText: 'Get Benefits ',
-        image: require('../../public/images/orang-banner3.png'), // Gunakan gambar yang sama untuk sementara
+        title: 'Gabung\nMembership 🌟',
+        buttonText: 'Dapatkan Benefit 🎁',
+        image: require('../../public/images/orang-banner3.png'),
         color: '#5C6BC0', // Warna biru
         imageWidth: 200,
         imageHeight: 170,

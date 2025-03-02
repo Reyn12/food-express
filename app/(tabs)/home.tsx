@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import LocationHeader from '../../components/home/LocationHeader';
 import CardBanner from '../../components/home/CardBanner';
 import { COLORS } from '../../constants/theme';
+import SearchFilter from '../../components/home/SearchFilter';
 
 export default function Home() {
   return (
@@ -12,7 +13,7 @@ export default function Home() {
         contentContainerStyle={styles.scrollContent}
       >
         <CardBanner />
-        
+        <SearchFilter />
         {/* Komponen lainnya bisa ditambahkan di sini */}
       </ScrollView>
     </View>
