@@ -5,7 +5,8 @@ import { useState, useEffect } from 'react';
 import * as Location from 'expo-location';
 import mapboxSdk from '@mapbox/mapbox-sdk';
 import geocoding from '@mapbox/mapbox-sdk/services/geocoding';
-import Constants from 'expo-constants';
+import ENV from '../../env';
+
 
 const LocationHeader = () => {
   const [address, setAddress] = useState('Loading...');
@@ -23,13 +24,14 @@ const LocationHeader = () => {
         setAddress('Izin lokasi ditolak');
         return;
       }
+      
 
       // Dapatkan lokasi user
       const location = await Location.getCurrentPositionAsync({});
       const { latitude, longitude } = location.coords;
       
       // Gunakan Mapbox untuk reverse geocoding
-      const mapboxClient = mapboxSdk({ accessToken: Constants.expoConfig?.extra?.mapboxAccessToken });
+      const mapboxClient = mapboxSdk({ accessToken: ENV.MAPBOX_ACCESS_TOKEN });
       const geocodingClient = geocoding(mapboxClient);
       
       const response = await geocodingClient.reverseGeocode({

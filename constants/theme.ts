@@ -2,6 +2,7 @@ export const COLORS = {
     primary: '#1B263B',    // Warna biru gelap
     secondary: '#2D3B50',  // Warna biru lebih terang
     accent: '#FFB800',     // Warna kuning
+    white: '#FFFFFF',       // Text putih
     text: {
       primary: '#FFFFFF',  // Text putih
       secondary: '#999999' // Text abu-abu
