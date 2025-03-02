@@ -13,6 +13,8 @@ interface CarouselItem {
     buttonText: string;
     image: ImageSourcePropType;
     color: string;
+    imageWidth?: number; // Properti opsional untuk width gambar
+    imageHeight?: number; // Properti opsional untuk height gambar
 }
 
 // Data untuk carousel
@@ -23,20 +25,26 @@ const carouselData: CarouselItem[] = [
         buttonText: 'Get 40% Off ',
         image: require('../../public/images/orang-banner1.png'),
         color: COLORS.accent,
+        imageWidth: 220,
+        imageHeight: 180,
     },
     {
         id: '2',
         title: 'Quick Order\nFavorites',
         buttonText: 'Order Now ',
-        image: require('../../public/images/orang-banner1.png'), // Gunakan gambar yang sama untuk sementara
+        image: require('../../public/images/orang-banner2.png'), // Gunakan gambar yang sama untuk sementara
         color: '#4CAF50', // Warna hijau
+        imageWidth: 280,
+        imageHeight: 200,
     },
     {
         id: '3',
         title: 'Join\nMembership',
         buttonText: 'Get Benefits ',
-        image: require('../../public/images/orang-banner1.png'), // Gunakan gambar yang sama untuk sementara
+        image: require('../../public/images/orang-banner3.png'), // Gunakan gambar yang sama untuk sementara
         color: '#5C6BC0', // Warna biru
+        imageWidth: 200,
+        imageHeight: 170,
     },
 ];
 
@@ -55,7 +63,13 @@ const BannerCard: React.FC<{ item: CarouselItem }> = ({ item }) => {
 
             <Image
                 source={item.image}
-                style={styles.image}
+                style={[
+                    styles.image,
+                    {
+                        width: item.imageWidth || 220,
+                        height: item.imageHeight || 180
+                    }
+                ]}
                 resizeMode="contain"
             />
         </View>
@@ -137,8 +151,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: -20,
         bottom: -20,
-        width: 220,
-        height: 180, // Sengaja dibuat lebih tinggi agar bisa melebihi card
         zIndex: 1,
     },
 });
