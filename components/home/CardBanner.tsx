@@ -1,23 +1,60 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ImageSourcePropType } from 'react-native';
 import { COLORS, SIZES } from '../../constants/theme';
+import Carousel from 'react-native-reanimated-carousel';
 
-const CardBanner = () => {
+const { width } = Dimensions.get('window');
+const CARD_WIDTH = width * 0.9;
+
+// Interface untuk tipe data item carousel
+interface CarouselItem {
+  id: string;
+  title: string;
+  buttonText: string;
+  image: ImageSourcePropType;
+  color: string;
+}
+
+// Data untuk carousel
+const carouselData: CarouselItem[] = [
+  {
+    id: '1',
+    title: 'Shop Smarter,\nSave More!',
+    buttonText: 'Get 40% Off ',
+    image: require('../../public/images/orang-banner1.png'),
+    color: COLORS.accent,
+  },
+  {
+    id: '2',
+    title: 'Quick Order\nFavorites',
+    buttonText: 'Order Now ',
+    image: require('../../public/images/orang-banner1.png'), // Gunakan gambar yang sama untuk sementara
+    color: '#4CAF50', // Warna hijau
+  },
+  {
+    id: '3',
+    title: 'Join\nMembership',
+    buttonText: 'Get Benefits ',
+    image: require('../../public/images/orang-banner1.png'), // Gunakan gambar yang sama untuk sementara
+    color: '#5C6BC0', // Warna biru
+  },
+];
+
+const BannerCard: React.FC<{ item: CarouselItem }> = ({ item }) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.cardContent}>
+    <View style={[styles.container, { width: CARD_WIDTH }]}>
+      <View style={[styles.cardContent, { backgroundColor: item.color }]}>
         <View style={styles.textContainer}>
-          <Text style={styles.title}>Shop Smarter,</Text>
-          <Text style={styles.title}>Save More!</Text>
+          <Text style={styles.title}>{item.title}</Text>
           
           <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Get 40% Off 🎉</Text>
+            <Text style={styles.buttonText}>{item.buttonText}</Text>
           </TouchableOpacity>
         </View>
       </View>
       
       <Image 
-        source={require('../../public/images/orang-banner1.png')}
+        source={item.image}
         style={styles.image}
         resizeMode="contain"
       />
@@ -25,21 +62,48 @@ const CardBanner = () => {
   );
 };
 
+const CardBanner: React.FC = () => {
+  return (
+    <View style={styles.carouselContainer}>
+      <Carousel
+        loop
+        width={CARD_WIDTH}
+        height={160}
+        autoPlay={true}
+        data={carouselData}
+        scrollAnimationDuration={1000}
+        autoPlayInterval={5000}
+        mode="parallax"
+        modeConfig={{
+          parallaxScrollingScale: 0.9,
+          parallaxScrollingOffset: 50,
+        }}
+        style={{ width: width }}
+        onSnapToItem={(index) => console.log('current index:', index)}
+        renderItem={({ item }) => <BannerCard item={item} />}
+      />
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
+  carouselContainer: {
+    paddingVertical: 15,
+    width: width,
+    alignItems: 'center',
+  },
   container: {
-    width: '90%',
     height: 160,
     borderRadius: SIZES.radius.lg,
     overflow: 'hidden',
-    marginVertical: 15,
     position: 'relative',
   },
   cardContent: {
-    backgroundColor: COLORS.accent,
     width: '100%',
     height: '100%',
     borderRadius: SIZES.radius.lg,
     paddingHorizontal: 20,
+    marginHorizontal: 10,
     paddingVertical: 15,
     flexDirection: 'row',
   },
