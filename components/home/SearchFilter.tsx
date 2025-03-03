@@ -81,7 +81,10 @@ const SearchFilter: React.FC = () => {
       </View>
 
       {/* Filter Categories */}
+      <Text style={styles.sectionTitle}>Kategori</Text>
       <ScrollView
+
+      
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.categoriesContainer}
@@ -137,30 +140,38 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: COLORS.primary,
   },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: COLORS.primary,
+  },
   categoriesContainer: {
     paddingVertical: 10,
     paddingRight: 20,
   },
   categoryButton: {
-    flexDirection: 'row',
+    flexDirection: 'column',
+    justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 15,
     paddingVertical: 8,
-    borderRadius: SIZES.radius.md,
+    borderRadius: 30,
     marginRight: 10,
     borderWidth: 1,
     borderColor: '#EEEEEE',
+    width: 85,
+    height: 100,
   },
   iconContainer: {
-    width: 32,
-    height: 32,
+    width: 40,
+    height: 40,
     borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 8,
+    marginBottom: 10,
   },
   categoryText: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '500',
   },
 });
