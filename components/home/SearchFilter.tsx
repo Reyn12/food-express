@@ -83,8 +83,6 @@ const SearchFilter: React.FC = () => {
       {/* Filter Categories */}
       <Text style={styles.sectionTitle}>Kategori</Text>
       <ScrollView
-
-      
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.categoriesContainer}
@@ -165,7 +163,7 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: 40,
     height: 40,
-    borderRadius: 16,
+    borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10,
