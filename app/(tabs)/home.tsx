@@ -15,9 +15,9 @@ interface FoodItem {
   image_url: string;
   category: string;
   delivery_time: number;
-  location: string;
   description?: string;
   is_available?: boolean;
+  discount?: number;
 }
 
 export default function Home() {
@@ -75,7 +75,7 @@ export default function Home() {
                 imageUrl={item.image_url}
                 category={item.category}
                 deliveryTime={item.delivery_time}
-                location={item.location}
+                discount={item.discount}
                 onPress={() => console.log('Item pressed:', item.id)}
               />
             ))
