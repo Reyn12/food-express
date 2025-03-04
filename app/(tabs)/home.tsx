@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, FlatList } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, RefreshControl   } from 'react-native';
 import { useEffect, useState } from 'react';
 import LocationHeader from '../../components/home/LocationHeader';
 import CardBanner from '../../components/home/CardBanner';
@@ -8,6 +8,7 @@ import CardProduk from '../../components/home/CardProduk';
 import { supabase } from '../../lib/supabase';
 import { FoodItem } from '@/types/database';
 import { Dimensions } from 'react-native';
+import React from 'react';
 
 const { width } = Dimensions.get('window');
 
@@ -18,6 +19,22 @@ export default function Home() {
   const [activeCategories, setActiveCategories] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setIsLoading(true); // Tambahkan ini untuk menampilkan loading
+    
+    // Panggil fungsi fetchFoodItems dan tunggu sampai selesai
+    fetchFoodItems();
+    
+    // Set timeout untuk simulasi loading dan matikan refreshing
+    setTimeout(() => {
+      setRefreshing(false);
+      setIsLoading(false);
+    }, 2000);
+  }, []);
+  
 
   // Simulasi loading
   useEffect(() => {
@@ -82,6 +99,9 @@ export default function Home() {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
         <CardBanner />
         <SearchFilter
