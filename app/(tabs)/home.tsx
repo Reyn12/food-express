@@ -8,10 +8,12 @@ import CardProduk from '../../components/home/CardProduk';
 import { supabase } from '../../lib/supabase';
 import { FoodItem } from '@/types/database';
 
-
 export default function Home() {
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
+  const [filteredItems, setFilteredItems] = useState<FoodItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeCategories, setActiveCategories] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetchFoodItems();
@@ -40,22 +42,48 @@ export default function Home() {
     }
   };
 
+  // Filter data berdasarkan kategori dan search
+  useEffect(() => {
+    if (foodItems.length > 0) {
+      let result = [...foodItems];
+
+      // Filter berdasarkan kategori jika ada yang aktif
+      if (activeCategories.length > 0 && !activeCategories.includes('Semua')) {
+        result = result.filter(item =>
+          activeCategories.includes(item.category)
+        );
+      }
+
+      // Filter berdasarkan search query
+      if (searchQuery) {
+        result = result.filter(item =>
+          item.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }
+
+      setFilteredItems(result);
+    }
+  }, [foodItems, activeCategories, searchQuery]);
+
   return (
     <View style={styles.container}>
       <LocationHeader />
-      <ScrollView 
+      <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
         <CardBanner />
-        <SearchFilter />
-        
+        <SearchFilter
+          onCategoryChange={setActiveCategories}
+          onSearchChange={setSearchQuery}
+        />
+
         {/* Tampilkan daftar makanan */}
         <View style={styles.foodGrid}>
           {loading ? (
             <Text>Loading...</Text>
-          ) : foodItems.length > 0 ? (
-            foodItems.map((item) => (
+          ) : filteredItems.length > 0 ? (
+            filteredItems.map((item) => (
               <CardProduk
                 key={item.id}
                 id={item.id}
@@ -64,7 +92,6 @@ export default function Home() {
                 imageUrl={item.image_url}
                 category={item.category}
                 deliveryTime={item.delivery_time}
-                onPress={() => console.log('Item pressed:', item.id)}
               />
             ))
           ) : (
@@ -90,6 +117,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     width: '90%',
-    marginTop: 20,
+    marginTop: 5,
   },
 });

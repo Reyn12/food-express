@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SIZES } from '../../constants/theme';
@@ -11,7 +11,12 @@ interface Category {
   active: boolean;
 }
 
-const SearchFilter: React.FC = () => {
+interface SearchFilterProps {
+  onCategoryChange: (categories: string[]) => void;
+  onSearchChange: (query: string) => void;
+}
+
+const SearchFilter: React.FC<SearchFilterProps> = ({ onCategoryChange, onSearchChange }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [categories, setCategories] = useState<Category[]>([
     { 
@@ -51,6 +56,19 @@ const SearchFilter: React.FC = () => {
       active: false 
     },
   ]);
+
+  // Kirim perubahan ke parent
+  useEffect(() => {
+    const activeCategories = categories
+      .filter(cat => cat.active)
+      .map(cat => cat.name);
+    onCategoryChange(activeCategories);
+  }, [categories, onCategoryChange]);
+
+  // Kirim perubahan search
+  useEffect(() => {
+    onSearchChange(searchQuery);
+  }, [searchQuery, onSearchChange]);
 
   // Fungsi untuk mengubah kategori aktif
   const toggleCategory = (id: string) => {

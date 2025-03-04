@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     fontWeight: '600',
-    color: COLORS.text.primary,
+    color: COLORS.primary,
     marginBottom: 5,
   },
   categoryContainer: {
