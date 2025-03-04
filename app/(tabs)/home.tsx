@@ -7,8 +7,9 @@ import SearchFilter from '../../components/home/SearchFilter';
 import CardProduk from '../../components/home/CardProduk';
 import { supabase } from '../../lib/supabase';
 import { FoodItem } from '@/types/database';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import { Dimensions } from 'react-native';
 
+const { width } = Dimensions.get('window');
 
 export default function Home() {
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
@@ -86,12 +87,24 @@ export default function Home() {
         <SearchFilter
           onCategoryChange={setActiveCategories}
           onSearchChange={setSearchQuery}
-        /> 
- 
+        />
+
         {/* Tampilkan daftar makanan */}
         <View style={styles.foodGrid}>
           {isLoading ? (
-            <Text>Loading...</Text>
+            // Loading indicator yang lebih menarik
+            <>
+              {[1, 2, 3, 4].map((item) => (
+                <View key={`loading-${item}`} style={styles.loadingCard}>
+                  <View style={styles.loadingImage} />
+                  <View style={styles.loadingContent}>
+                    <View style={styles.loadingTitle} />
+                    <View style={styles.loadingCategory} />
+                    <View style={styles.loadingPrice} />
+                  </View>
+                </View>
+              ))}
+            </>
           ) : filteredItems.length > 0 ? (
             filteredItems.map((item) => (
               <CardProduk
@@ -128,5 +141,51 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '90%',
     marginTop: 5,
+  },
+
+  // Loading card style
+  loadingCard: {
+    width: width / 2 - 30,
+    backgroundColor: COLORS.white,
+    borderRadius: 15,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+    overflow: 'hidden',
+    borderWidth: 2,
+    borderColor: '#EEEEEE',
+  },
+  loadingImage: {
+    width: '100%',
+    height: 140,
+    backgroundColor: '#E0E0E0',
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+  },
+  loadingContent: {
+    padding: 12,
+  },
+  loadingTitle: {
+    width: '80%',
+    height: 16,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 4,
+    marginBottom: 8,
+  },
+  loadingCategory: {
+    width: '50%',
+    height: 12,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 4,
+    marginBottom: 12,
+  },
+  loadingPrice: {
+    width: '40%',
+    height: 14,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 4,
   },
 });
