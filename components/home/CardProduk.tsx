@@ -14,18 +14,15 @@ interface CardProdukProps {
   imageUrl: string;
   category: string;
   deliveryTime?: number;
-  discount?: number;
   onPress?: () => void;
 }
 
 const CardProduk: React.FC<CardProdukProps> = ({
-  id,
   name,
   price,
   imageUrl,
   category,
   deliveryTime,
-  discount,
   onPress
 }) => {
   // Base URL untuk ImageKit
@@ -53,13 +50,6 @@ const CardProduk: React.FC<CardProdukProps> = ({
             color={isFavorite ? "#FF3B30" : COLORS.white} 
           />
         </TouchableOpacity>
-        
-        {/* Discount Label */}
-        {discount && (
-          <View style={styles.discountContainer}>
-            <Text style={styles.discountText}>{discount}%</Text>
-          </View>
-        )}
         
         {deliveryTime && (
           <View style={styles.timeContainer}>
@@ -129,22 +119,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1,
-  },
-  discountContainer: {
-    position: 'absolute',
-    top: 10,
-    left: 10,
-    backgroundColor: COLORS.accent,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  discountText: {
-    color: COLORS.white,
-    fontSize: 12,
-    fontWeight: 'bold',
   },
   timeContainer: {
     position: 'absolute',

@@ -6,19 +6,8 @@ import { COLORS } from '../../constants/theme';
 import SearchFilter from '../../components/home/SearchFilter';
 import CardProduk from '../../components/home/CardProduk';
 import { supabase } from '../../lib/supabase';
+import { FoodItem } from '@/types/database';
 
-// Interface untuk data makanan
-interface FoodItem {
-  id: string;
-  name: string;
-  price: number;
-  image_url: string;
-  category: string;
-  delivery_time: number;
-  description?: string;
-  is_available?: boolean;
-  discount?: number;
-}
 
 export default function Home() {
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
@@ -75,7 +64,6 @@ export default function Home() {
                 imageUrl={item.image_url}
                 category={item.category}
                 deliveryTime={item.delivery_time}
-                discount={item.discount}
                 onPress={() => console.log('Item pressed:', item.id)}
               />
             ))
