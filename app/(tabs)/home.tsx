@@ -7,6 +7,8 @@ import SearchFilter from '../../components/home/SearchFilter';
 import CardProduk from '../../components/home/CardProduk';
 import { supabase } from '../../lib/supabase';
 import { FoodItem } from '@/types/database';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+
 
 export default function Home() {
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
@@ -14,6 +16,14 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [activeCategories, setActiveCategories] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Simulasi loading
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  }, []);
 
   useEffect(() => {
     fetchFoodItems();
@@ -76,11 +86,11 @@ export default function Home() {
         <SearchFilter
           onCategoryChange={setActiveCategories}
           onSearchChange={setSearchQuery}
-        />
-
+        /> 
+ 
         {/* Tampilkan daftar makanan */}
         <View style={styles.foodGrid}>
-          {loading ? (
+          {isLoading ? (
             <Text>Loading...</Text>
           ) : filteredItems.length > 0 ? (
             filteredItems.map((item) => (
