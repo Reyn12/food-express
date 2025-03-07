@@ -15,7 +15,6 @@ const { width } = Dimensions.get('window');
 export default function Home() {
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
   const [filteredItems, setFilteredItems] = useState<FoodItem[]>([]);
-  const [loading, setLoading] = useState(true);
   const [activeCategories, setActiveCategories] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -24,7 +23,7 @@ export default function Home() {
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     setIsLoading(true); // Tambahkan ini untuk menampilkan loading
-    
+     
     // Panggil fungsi fetchFoodItems dan tunggu sampai selesai
     fetchFoodItems();
     
@@ -66,7 +65,7 @@ export default function Home() {
     } catch (error) {
       console.error('Unexpected error:', error);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 

@@ -8,7 +8,7 @@ export default function TabLayout() {
       tabBarInactiveTintColor: 'gray',
       headerShown: false,
       tabBarStyle: {
-        borderRadius: 35,
+        // borderRadius: 35,
         paddingTop: 10,
         elevation: 5,
         shadowColor: '#000',
