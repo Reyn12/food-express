@@ -7,46 +7,14 @@ import { FoodItem } from '@/types/database';
 
 const { width } = Dimensions.get('window');
 
-// Data kategori
-const categories = [
-  {
-    id: '1',
-    name: 'Semua',
-    icon: 'grid-outline',
-  },
-  {
-    id: '2',
-    name: 'Burger',
-    icon: 'fast-food-outline',
-  },
-  {
-    id: '3',
-    name: 'Pizza',
-    icon: 'pizza-outline',
-  },
-  {
-    id: '4',
-    name: 'Minuman',
-    icon: 'cafe-outline',
-  },
-  {
-    id: '5',
-    name: 'Dessert',
-    icon: 'ice-cream-outline',
-  },
-  {
-    id: '6',
-    name: 'Seafood',
-    icon: 'fish-outline',
-  },
-];
-
 export default function Menu() {
   const [activeCategory, setActiveCategory] = useState('1');
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
   const [filteredItems, setFilteredItems] = useState<FoodItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [categories, setCategories] = useState<{id: string, name: string, icon: string}[]>([]);
+
 
   // Fungsi untuk mengambil data dari Supabase
   const fetchFoodItems = async () => {
@@ -92,15 +60,50 @@ export default function Menu() {
   // Filter data berdasarkan kategori
   useEffect(() => {
     if (foodItems.length > 0) {
+      // Ambil kategori unik dari data makanan
+      const uniqueCategories = Array.from(new Set(foodItems.map(item => item.category)));
+      
+      // Buat array kategori dengan format yang sama seperti sebelumnya
+      const categoryData = [
+        {
+          id: '1',
+          name: 'Semua',
+          icon: 'grid-outline',
+        },
+        ...uniqueCategories.map((category, index) => {
+          // Tentukan icon berdasarkan kategori
+          let icon = 'fast-food-outline';
+          if (category.toLowerCase().includes('minuman')) icon = 'cafe-outline';
+          else if (category.toLowerCase().includes('dessert')) icon = 'ice-cream-outline';
+          else if (category.toLowerCase().includes('pizza')) icon = 'pizza-outline';
+          else if (category.toLowerCase().includes('seafood')) icon = 'fish-outline';
+          
+          return {
+            id: (index + 2).toString(), // ID dimulai dari 2 karena 1 sudah untuk "Semua"
+            name: category,
+            icon: icon,
+          };
+        }),
+      ];
+      
+      setCategories(categoryData);
+    }
+  }, [foodItems]);
+
+  useEffect(() => {
+    if (foodItems.length > 0) {
       if (activeCategory === '1') {
+        // Jika kategori "Semua" dipilih, tampilkan semua item
         setFilteredItems(foodItems);
       } else {
+        // Cari nama kategori berdasarkan ID yang aktif
         const categoryName = categories.find(cat => cat.id === activeCategory)?.name || '';
+        // Filter item berdasarkan kategori
         const filtered = foodItems.filter(item => item.category === categoryName);
         setFilteredItems(filtered);
       }
     }
-  }, [foodItems, activeCategory]);
+  }, [foodItems, activeCategory, categories]);
 
   // Render item menu
   const renderMenuItem = (item: FoodItem) => {
@@ -217,7 +220,8 @@ export default function Menu() {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         >
-          {isLoading ? (
+          {isLoading
+           ? (
             renderSkeletonLoading()
           ) : filteredItems.length > 0 ? (
             filteredItems.map(item => renderMenuItem(item))
@@ -246,6 +250,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 10,
     backgroundColor: COLORS.white,
+    marginTop: 40,
   },
   headerTitle: {
     fontSize: 24,
