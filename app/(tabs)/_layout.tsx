@@ -1,8 +1,92 @@
-import { Tabs } from 'expo-router';
+import { router, Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import { useRef } from 'react';
+
+// Type untuk props AnimatedTabIcon
+interface AnimatedTabIconProps {
+  focused: boolean;
+  color: string;
+  iconName: keyof typeof Ionicons.glyphMap;
+  size?: number;
+  onPress?: () => void;
+}
+
+// Komponen AnimatedTabIcon untuk handle animasi di setiap tab
+const AnimatedTabIcon = ({ focused, color, iconName, size = 24, onPress }: AnimatedTabIconProps) => {
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+
+  const onPressIn = () => {
+    Animated.spring(scaleAnim, {
+      toValue: 0.8,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const onPressOut = () => {
+    Animated.spring(scaleAnim, {
+      toValue: 1,
+      friction: 3,
+      tension: 40,
+      useNativeDriver: true,
+    }).start();
+    if (onPress) {
+      onPress();
+    }
+  };
+
+  // Tentukan nama icon yang tepat berdasarkan status focused
+  const getIconName = () => {
+    switch (iconName) {
+      case 'home':
+        return focused ? 'home' : 'home-outline';
+      case 'restaurant':
+        return focused ? 'restaurant' : 'restaurant-outline';
+      case 'receipt':
+        return focused ? 'receipt' : 'receipt-outline';
+      case 'person':
+        return focused ? 'person' : 'person-outline';
+      default:
+        return iconName;
+    }
+  };
+
+  return (
+    <TouchableOpacity
+      activeOpacity={1}
+      onPressIn={onPressIn}
+      onPressOut={onPressOut}
+    >
+      <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+        <Ionicons 
+          name={getIconName()}
+          size={size}
+          color={color}
+        />
+      </Animated.View>
+    </TouchableOpacity>
+  );
+};
 
 export default function TabLayout() {
+  const cartScaleAnim = useRef(new Animated.Value(1)).current;
+  
+  const onCartPressIn = () => {
+    Animated.spring(cartScaleAnim, {
+      toValue: 0.9,
+      useNativeDriver: true,
+    }).start();
+  };
+  
+  const onCartPressOut = () => {
+    Animated.spring(cartScaleAnim, {
+      toValue: 1,
+      friction: 3,
+      tension: 40,
+      useNativeDriver: true,
+    }).start();
+  };
+
   return (
     <Tabs screenOptions={{
       tabBarActiveTintColor: '#e91e63',
@@ -15,7 +99,7 @@ export default function TabLayout() {
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        height: 80,
+        height: 90,
       },
     }}>
       <Tabs.Screen 
@@ -24,7 +108,12 @@ export default function TabLayout() {
           title: 'Home',
           tabBarLabel: 'Home',
           tabBarIcon: ({ focused, color }) => (
-            <Ionicons name={focused ? 'home' : 'home-outline'} size={24} color={color} />
+            <AnimatedTabIcon 
+              focused={focused}
+              color={color}
+              iconName="home"
+              onPress={() => router.push('/home')}
+            />
           ),
         }}
       />
@@ -34,7 +123,12 @@ export default function TabLayout() {
           title: 'Menu',
           tabBarLabel: 'Menu',
           tabBarIcon: ({ focused, color }) => (
-            <Ionicons name={focused ? 'restaurant' : 'restaurant-outline'} size={24} color={color} />
+            <AnimatedTabIcon 
+              focused={focused}
+              color={color}
+              iconName="restaurant"
+              onPress={() => router.push('/menu')}
+            />
           ),
         }}
       />
@@ -45,9 +139,21 @@ export default function TabLayout() {
           tabBarLabel: '',
           tabBarIcon: () => (
             <View style={styles.cartButtonContainer}>
-              <View style={styles.cartButton}>
-                <Ionicons name="cart-outline" size={28} color="#fff" />
-              </View>
+              <TouchableOpacity
+                activeOpacity={1}
+                onPressIn={onCartPressIn}
+                onPressOut={onCartPressOut}
+                onPress={() => router.push('/cart')}
+              >
+                <Animated.View 
+                  style={[
+                    styles.cartButton,
+                    { transform: [{ scale: cartScaleAnim }] }
+                  ]}
+                >
+                  <Ionicons name="cart-outline" size={28} color="#fff" />
+                </Animated.View>
+              </TouchableOpacity>
             </View>
           ),
         }}
@@ -58,7 +164,12 @@ export default function TabLayout() {
           title: 'Pesanan',
           tabBarLabel: 'Pesanan',
           tabBarIcon: ({ focused, color }) => (
-            <Ionicons name={focused ? 'receipt' : 'receipt-outline'} size={24} color={color} />
+            <AnimatedTabIcon 
+              focused={focused}
+              color={color}
+              iconName="receipt"
+              onPress={() => router.push('/pesanan')}
+            />
           ),
         }}
       />
@@ -68,7 +179,12 @@ export default function TabLayout() {
           title: 'Profile',
           tabBarLabel: 'Profile',
           tabBarIcon: ({ focused, color }) => (
-            <Ionicons name={focused ? 'person' : 'person-outline'} size={24} color={color} />
+            <AnimatedTabIcon 
+              focused={focused}
+              color={color}
+              iconName="person"
+              onPress={() => router.push('/profile')}
+            />
           ),
         }}
       />
